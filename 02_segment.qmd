@@ -89,17 +89,17 @@ Note that some pixels within the bottom leaf were considered as background and s
 bin <- image_binary(img, 
                     index = "B", 
                     fill_hull = TRUE,
-                    show_image = FALSE)[[1]]
+                    plot =  FALSE)[[1]]
 bin2 <- image_binary(img, 
                      index = "B", 
                      fill_hull = TRUE,
                      filter = 2,
-                     show_image = FALSE)[[1]]
+                     plot =  FALSE)[[1]]
 bin3 <- image_binary(img, 
                      index = "B",
                      fill_hull = TRUE,
                      filter = 30,
-                     show_image = FALSE)[[1]]
+                     plot =  FALSE)[[1]]
 
 image_combine(bin, bin2, bin3, ncol = 3)
 ```

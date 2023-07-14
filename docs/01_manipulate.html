@@ -2,16 +2,22 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.36">
+<meta name="generator" content="quarto-1.4.205">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>R package {pliman} - Import and manipulate</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -38,43 +44,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -102,6 +78,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   "panel-placement": "start",
   "type": "textbox",
   "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -111,7 +90,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script><style>html{ scroll-behavior: smooth; }</style>
 <link rel="stylesheet" href="style.css">
@@ -120,101 +100,116 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
-      <a class="navbar-brand" href="./index.html">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">R package {pliman}</span>
-  </a>
+    </a>
+  </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
 <li class="nav-item">
-    <a class="nav-link" href="./00_about.html">About</a>
+    <a class="nav-link" href="./00_about.html" rel="" target=""><i class="bi bi-fa fa-home" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
   </li>  
 </ul>
 <ul class="navbar-nav navbar-nav-scroll ms-auto">
 <li class="nav-item compact">
-    <a class="nav-link" href="https://www.researchgate.net/profile/Tiago_Olivoto"><i class="bi bi-fab fa-researchgate fa" role="img">
+    <a class="nav-link" href="https://www.researchgate.net/profile/Tiago_Olivoto" rel="" target=""><i class="bi bi-fab fa-researchgate fa" role="img">
 </i> 
- </a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/TiagoOlivoto/pliman"><i class="bi bi-bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/TiagoOlivoto/pliman" rel="" target=""><i class="bi bi-bi bi-github" role="img">
 </i> 
- </a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/tolivoto"><i class="bi bi-bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/tolivoto" rel="" target=""><i class="bi bi-bi bi-twitter" role="img">
 </i> 
- </a>
+ <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://www.mendeley.com/profiles/tiago-olivoto/"><i class="bi bi-fab fa-mendeley fa" role="img">
+    <a class="nav-link" href="https://www.mendeley.com/profiles/tiago-olivoto/" rel="" target=""><i class="bi bi-fab fa-mendeley fa" role="img">
 </i> 
- </a>
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
-<div class="quarto-toggle-container">
-                  <a href="" class="quarto-color-scheme-toggle nav-link" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
-              </div>
-          </div> <!-- /navcollapse -->
+</div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
       </div> <!-- /container-fluid -->
-    </nav><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Import and manipulate</h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+    </nav><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_manipulate.html">Import and manipulate</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto"><div class="mt-2 flex-shrink-0 align-items-center">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto"><div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./01_manipulate.html" class="sidebar-item-text sidebar-link active">Import and manipulate</a>
+  <a href="./01_manipulate.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Import and manipulate</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02_segment.html" class="sidebar-item-text sidebar-link">Segment objects</a>
+  <a href="./02_segment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Segment objects</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03_analyze.html" class="sidebar-item-text sidebar-link">Analyze objects</a>
+  <a href="./03_analyze.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Analyze objects</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04_phytopathometry.html" class="sidebar-item-text sidebar-link">Phytopathometry</a>
+  <a href="./04_phytopathometry.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Phytopathometry</span></a>
   </div>
 </li>
     </ul>
 </div>
-</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc"><h2 id="toc-title">In this page</h2>
+</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">In this page</h2>
    
   <ul>
-<li><a href="#directory" id="toc-directory" class="nav-link active" data-scroll-target="#directory"> <span class="header-section-number">1</span> Directory</a></li>
-  <li><a href="#file-manipulation" id="toc-file-manipulation" class="nav-link" data-scroll-target="#file-manipulation"> <span class="header-section-number">2</span> File manipulation</a></li>
-  <li><a href="#import-images" id="toc-import-images" class="nav-link" data-scroll-target="#import-images"> <span class="header-section-number">3</span> Import images</a></li>
-  <li><a href="#displaying-imagens" id="toc-displaying-imagens" class="nav-link" data-scroll-target="#displaying-imagens"> <span class="header-section-number">4</span> Displaying imagens</a></li>
-  <li><a href="#resize-an-image" id="toc-resize-an-image" class="nav-link" data-scroll-target="#resize-an-image"> <span class="header-section-number">5</span> Resize an image</a></li>
-  <li><a href="#dpi" id="toc-dpi" class="nav-link" data-scroll-target="#dpi"> <span class="header-section-number">6</span> Image resolution (DPI)</a></li>
-  <li><a href="#align-an-image" id="toc-align-an-image" class="nav-link" data-scroll-target="#align-an-image"> <span class="header-section-number">7</span> Align an image</a></li>
-  <li><a href="#filter-blur-contrast-dilatation-erosion-opening-and-closing" id="toc-filter-blur-contrast-dilatation-erosion-opening-and-closing" class="nav-link" data-scroll-target="#filter-blur-contrast-dilatation-erosion-opening-and-closing"> <span class="header-section-number">8</span> Filter, blur, contrast, dilatation, erosion, opening, and closing</a></li>
-  <li><a href="#apply-a-function-to-images" id="toc-apply-a-function-to-images" class="nav-link" data-scroll-target="#apply-a-function-to-images"> <span class="header-section-number">9</span> Apply a function to images</a></li>
-  <li><a href="#export" id="toc-export" class="nav-link" data-scroll-target="#export"> <span class="header-section-number">10</span> Export</a></li>
+<li><a href="#directory" id="toc-directory" class="nav-link active" data-scroll-target="#directory"><span class="header-section-number">1</span> Directory</a></li>
+  <li><a href="#file-manipulation" id="toc-file-manipulation" class="nav-link" data-scroll-target="#file-manipulation"><span class="header-section-number">2</span> File manipulation</a></li>
+  <li><a href="#import-images" id="toc-import-images" class="nav-link" data-scroll-target="#import-images"><span class="header-section-number">3</span> Import images</a></li>
+  <li><a href="#displaying-imagens" id="toc-displaying-imagens" class="nav-link" data-scroll-target="#displaying-imagens"><span class="header-section-number">4</span> Displaying imagens</a></li>
+  <li><a href="#resize-an-image" id="toc-resize-an-image" class="nav-link" data-scroll-target="#resize-an-image"><span class="header-section-number">5</span> Resize an image</a></li>
+  <li><a href="#dpi" id="toc-dpi" class="nav-link" data-scroll-target="#dpi"><span class="header-section-number">6</span> Image resolution (DPI)</a></li>
+  <li><a href="#align-an-image" id="toc-align-an-image" class="nav-link" data-scroll-target="#align-an-image"><span class="header-section-number">7</span> Align an image</a></li>
+  <li><a href="#filter-blur-contrast-dilatation-erosion-opening-and-closing" id="toc-filter-blur-contrast-dilatation-erosion-opening-and-closing" class="nav-link" data-scroll-target="#filter-blur-contrast-dilatation-erosion-opening-and-closing"><span class="header-section-number">8</span> Filter, blur, contrast, dilatation, erosion, opening, and closing</a></li>
+  <li><a href="#apply-a-function-to-images" id="toc-apply-a-function-to-images" class="nav-link" data-scroll-target="#apply-a-function-to-images"><span class="header-section-number">9</span> Apply a function to images</a></li>
+  <li><a href="#export" id="toc-export" class="nav-link" data-scroll-target="#export"><span class="header-section-number">10</span> Export</a></li>
   </ul></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block">Import and manipulate</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Import and manipulate</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -222,6 +217,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="quarto-title-meta">
 
     
+  
     
   </div>
   
@@ -258,8 +254,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>To import a list of images, use a vector of image names, or the <code>pattern</code> argument. In the latter, all images that match the pattern name are imported into a list.</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">img_list1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pliman/man/utils_image.html">image_import</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"img_sb_50_1.jpg"</span>, <span class="st">"img_sb_50_2.jpg"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">img_list2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pliman/man/utils_image.html">image_import</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"img_sb_"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">img_list1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pliman/man/utils_image.html">image_import</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"img_sb_50_1.jpg"</span>, <span class="st">"img_sb_50_2.jpg"</span><span class="op">)</span>, path <span class="op">=</span> <span class="st">"soja"</span><span class="op">)</span></span>
+<span><span class="va">img_list2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pliman/man/utils_image.html">image_import</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"img_sb_"</span>, path <span class="op">=</span> <span class="st">"soja"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">img_list2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>List of 13
@@ -419,20 +415,7 @@ Height:  502 </code></pre>
 <span>                  fun <span class="op">=</span> <span class="va">image_autocrop</span>,</span>
 <span>                  dir_processed <span class="op">=</span> <span class="st">"lista_exportada"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Processing image img_exported.jpg |==                            | 7% 00:00:00 
-Processing image img_sb_50_1.jpg |====                           | 14% 00:00:01 
-Processing image img_sb_50_10.jpg |======                        | 21% 00:00:01 
-Processing image img_sb_50_11.jpg |=========                     | 29% 00:00:01 
-Processing image img_sb_50_12.jpg |===========                   | 36% 00:00:01 
-Processing image img_sb_50_13.jpg |=============                 | 43% 00:00:02 
-Processing image img_sb_50_2.jpg |================               | 50% 00:00:02 
-Processing image img_sb_50_3.jpg |==================             | 57% 00:00:02 
-Processing image img_sb_50_4.jpg |====================           | 64% 00:00:03 
-Processing image img_sb_50_5.jpg |======================         | 71% 00:00:03 
-Processing image img_sb_50_6.jpg |========================       | 79% 00:00:03 
-Processing image img_sb_50_7.jpg |===========================    | 86% 00:00:03 
-Processing image img_sb_50_8.jpg |=============================  | 93% 00:00:04 
-Processing image img_sb_50_9.jpg |===============================| 100% 00:00:04 </code></pre>
+<pre><code>Processing image img_exported.jpg |==============================| 100% 00:00:00 </code></pre>
 </div>
 </div>
 </section><section id="export" class="level1" data-number="10"><h1 data-number="10">
@@ -492,6 +475,33 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
     }
   }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
   const toggleColorMode = (alternate) => {
     // Switch the stylesheets
     const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
@@ -519,6 +529,16 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
           toggle.classList.remove("alternate");
         }
       }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
     }
   }
   const isFileUrl = () => { 
@@ -548,13 +568,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return localAlternateSentinel;
     }
   }
-  let localAlternateSentinel = 'default';
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
   // Dark / light mode switch
   window.quartoToggleColorScheme = () => {
     // Read the current dark / light value 
     let toAlternate = !hasAlternateSentinel();
     toggleColorMode(toAlternate);
     setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
   };
   // Ensure there is a toggle, if there isn't float one in the top right
   if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -571,7 +593,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   // Switch to dark mode if need be
   if (hasAlternateSentinel()) {
     toggleColorMode(true);
-  } 
+  } else {
+    toggleColorMode(false);
+  }
   const icon = "";
   const anchorJS = new window.AnchorJS();
   anchorJS.options = {
@@ -579,9 +603,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -593,7 +631,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -651,10 +706,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -664,39 +718,208 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
     });
   }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
@@ -748,8 +971,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>To import a list of images, use a vector of image names, or the <span class="in">`pattern`</span> argument. In the latter, all images that match the pattern name are imported into a list.</span>
 <span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a><span class="in">```{r import2}</span></span>
-<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>img_list1 <span class="ot">&lt;-</span> <span class="fu">image_import</span>(<span class="fu">c</span>(<span class="st">"img_sb_50_1.jpg"</span>, <span class="st">"img_sb_50_2.jpg"</span>))</span>
-<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>img_list2 <span class="ot">&lt;-</span> <span class="fu">image_import</span>(<span class="at">pattern =</span> <span class="st">"img_sb_"</span>)</span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>img_list1 <span class="ot">&lt;-</span> <span class="fu">image_import</span>(<span class="fu">c</span>(<span class="st">"img_sb_50_1.jpg"</span>, <span class="st">"img_sb_50_2.jpg"</span>), <span class="at">path =</span> <span class="st">"soja"</span>)</span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>img_list2 <span class="ot">&lt;-</span> <span class="fu">image_import</span>(<span class="at">pattern =</span> <span class="st">"img_sb_"</span>, <span class="at">path =</span> <span class="st">"soja"</span>)</span>
 <span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(img_list2)</span>
 <span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a></span>
@@ -862,8 +1085,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer"><div class="nav-footer">
-    <div class="nav-footer-left">The {pliman} R package</div>   
-    <div class="nav-footer-right">Prof.&nbsp;Dr.&nbsp;Tiago Olivoto FIT/CCA/UFSC</div>
+    <div class="nav-footer-left">
+<p>The {pliman} R package</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Prof.&nbsp;Dr.&nbsp;Tiago Olivoto FIT/CCA/UFSC</p>
+</div>
   </div>
 </footer>
 

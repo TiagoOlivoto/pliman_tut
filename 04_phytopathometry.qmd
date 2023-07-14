@@ -128,7 +128,7 @@ system.time(
                     img_healthy = "soja_h",
                     img_symptoms = "soja_s",
                     img_background = "soja_b",
-                    show_image = FALSE,
+                    plot =  FALSE,
                     save_image = TRUE,
                     dir_processed = temp_dir,
                     show_contour = FALSE,
@@ -160,7 +160,7 @@ system.time(
                     img_healthy = "soja_h",
                     img_symptoms = "soja_s",
                     img_background = "soja_b",
-                    show_image = FALSE,
+                    plot =  FALSE,
                     parallel = TRUE)
 )
 
@@ -181,7 +181,7 @@ system.time(
                     img_symptoms = "feijao_s",
                     img_background = "feijao_b",
                     show_features = TRUE,
-                    show_image = FALSE,
+                    plot =  FALSE,
                     parallel = TRUE)
 )
 sev <- 
@@ -197,7 +197,7 @@ ggplot(sev, aes(TRAT, symptomatic))+
 ```
 
 # Multiple leaves in one image
-
+## Segment by color
 When multiple leaves are present in an image, the `measure_disease` function returns the average severity of the leaves present in the image. To quantify the severity *per leaf*, the `measure_disease_byl()` function can be used.
 
 This function computes the percentage of symptomatic leaf area using color palettes or RGB indices for each leaf (`byl`) of an image. This allows, for example, to process replicates of the same treatment and obtain the results of each replication with a single image. To do this, the sample sheets are first split using the `object_split()` function and then the `measure_disease()` function is applied to the sheet list.
@@ -218,6 +218,38 @@ results_byl <- get_measures(byl)
 results_byl$results |> 
   head()
 ```
+
+
+## Segment by shape
+```{r}
+img <- image_import("disease_shp.jpg", plot = TRUE)
+byl2 <- 
+  measure_disease_shp(img,
+                      filter = 10,
+                      ncol = 3,
+                      nrow = 3,
+                      index_lb = "HUE2",
+                      index_dh = "NGRDI",
+                      threshold = c("Otsu", 0),
+                      plot = FALSE)
+plot(img)
+plot(byl2$shapefiles)
+plot_measures(byl2, measure = "symptomatic")
+```
+
+
+# Interactive disease measurements
+
+An alternative approach to measuring disease percentage is available through the `measure_disease_iter()` function. This function offers an interactive interface that empowers users to manually select sample colors directly from the image. By doing so, it provides a highly customizable analysis method.
+
+One advantage of using `measure_disease_iter()` is the ability to utilize the "mapview" viewer, which enhances the analysis process by offering zoom-in options. This feature allows users to closely examine specific areas of the image, enabling detailed inspection and accurate disease measurement.
+
+```{r eval=FALSE}
+img <- image_pliman("sev_leaf.jpg", plot = TRUE)
+measure_disease_iter(img, viewer = "mapview")
+```
+
+![](imgs/gif_severity.gif)
 
 # More than two classes
 ```{r}

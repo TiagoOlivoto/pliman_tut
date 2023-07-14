@@ -39,8 +39,8 @@ img <- image_import("folhas.jpg")
 To import a list of images, use a vector of image names, or the `pattern` argument. In the latter, all images that match the pattern name are imported into a list.
 
 ```{r import2}
-img_list1 <- image_import(c("img_sb_50_1.jpg", "img_sb_50_2.jpg"))
-img_list2 <- image_import(pattern = "img_sb_")
+img_list1 <- image_import(c("img_sb_50_1.jpg", "img_sb_50_2.jpg"), path = "soja")
+img_list2 <- image_import(pattern = "img_sb_", path = "soja")
 str(img_list2)
 ```
 

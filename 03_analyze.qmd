@@ -68,8 +68,8 @@ Nice! We can use the contours of any object to get useful information related to
 
 ```{r}
 #| out-width: "100%"
-cont <- cont[c("1", "2", "12", "23")]
-plot_polygon(cont)
+cont2 <- cont[c("5", "20", "27")]
+plot_polygon(cont2)
 
 ```
 
@@ -205,7 +205,7 @@ Some useful functions can be used to manipulate coordinates. In the following ex
 
 ```{r}
 #| out-width: "100%"
-o2 <- cont[["12"]]
+o2 <- cont[[5]]
 plot_polygon(o2)
 ```
 
@@ -467,8 +467,12 @@ In image analysis, it is often necessary to process more than one image. For exa
 To speed up processing time, especially for large numbers of images, the `parallel = TRUE` argument can be used. In this case, images are processed asynchronously (in parallel) in separate `R` sessions running in the background on the same machine. The number of sections is set to 50% of available cores. This number can be explicitly controlled with the `workers` argument.
 
 ```{r}
+
 system.time(
-  list_res <- analyze_objects(pattern = "img_sb", show_image = FALSE)
+  list_res <- analyze_objects(pattern = "img_sb",
+                              verbose = FALSE,
+                              plot =  FALSE,
+                              dir_original = "soja")
 )
 
 # parallel processing
@@ -476,7 +480,9 @@ system.time(
 system.time(
   list_res <-
     analyze_objects(pattern = "img_sb",
-                    show_image = FALSE,
+                    verbose = FALSE,
+                    plot =  FALSE,
+                    dir_original = "soja",
                     parallel = TRUE)
 )
 
@@ -549,6 +555,7 @@ To get the RGB intensity of each object in the image, we use the `object_rgb = T
 
 img <- image_import("flax.jpg", plot = TRUE)
 (indx <- pliman_indexes())
+
 flax_leaves <-
   analyze_objects(img ,
                   index = "B",
@@ -558,9 +565,8 @@ flax_leaves <-
                   marker = "id",
                   marker_col = "black",
                   col_background = "white",
-                  parallel = TRUE,
+                  pixel_level_index = TRUE,
                   show_contour = FALSE)
-library(pliman)
 # PCA with the indices
 ind <- summary_index(flax_leaves, type ="var")
 
@@ -594,7 +600,7 @@ It seems that leaves with an average DGCI value of less than 0.4 can be consider
 report <-
   summary_index(flax_leaves ,
                 index = "DGCI",
-                cut_point = 0.4,
+                cut_point = 0.45,
                 plot = FALSE)
 ids <- report$ids
 report$between_id
@@ -641,47 +647,13 @@ plot_measures(flax_leaves ,
 ```
 
 
-
-::: callout-tip
-When there are many objects, the `parallel = TRUE` argument will speed up extracting the RGB values. In the following example, an image with 1343 grains of *Vicia cracca* is analyzed. The indices `"R"` and `"R/G"` are computed. Grains with an average red value greater than 0.25 are highlighted.
-
-```{r rgb5, eval=FALSE}
-
-library(pliman)
-img2 <- image_import("vicia.jpg")
-
-vicia <-
-  analyze_objects(img2,
-                  index = "B",
-                  object_index = "R",
-                  show_image = FALSE,
-                  parallel = TRUE)
-
-summary_index <-
-  summary_index(vicia ,
-                index = "R",
-                cut_point = 0.25,
-                select_higher = TRUE)
-
-count2 <-
-  object_contour(img2,
-                 index = "B",
-                 show_image = FALSE)
-
-ids2 <- summary_index$ids
-plot_contour(count2, col = "red")
-
-```
-:::
-
-
 # Leaf area
 
 ## Known resolution
 
 ```{r}
 #| out-width: "100%"
-leaves <- image_import(image = "ref_leaves.jpg", plot = TRUE)
+leaves <- image_import("ref_leaves.jpg", plot = TRUE)
 
 af <-
   analyze_objects(leaves,
@@ -720,12 +692,9 @@ The first step consists in segmenting the foreground (leaves and reference objec
 
 ```{r}
 #| out-width: "100%"
-
-
-library(pliman)
 img <- image_import("ref_leaves.jpg", plot = TRUE)
-ind <- image_index(img, index = "R/(G/B)", show_image = FALSE)[[1]]
-bin <- image_binary(img, index = "R/(G/B)", show_image = FALSE)[[1]]
+ind <- image_index(img, index = "R/(G/B)", plot =  FALSE)[[1]]
+bin <- image_binary(img, index = "R/(G/B)", plot =  FALSE)[[1]]
 image_combine(ind, bin)
 ```
 
@@ -740,8 +709,8 @@ The `B-G` index seems to be a good candidate.
 
 ```{r}
 #| out-width: "100%"
-ind <- image_index(img, index = "B-G", show_image = FALSE)[[1]]
-seg1 <- image_segment(img, index = "B-G", show_image = FALSE)
+ind <- image_index(img, index = "B-G", plot =  FALSE)[[1]]
+seg1 <- image_segment(img, index = "B-G", plot =  FALSE)
 image_combine(ind, seg1)
 ```
 
@@ -933,7 +902,7 @@ af <-
                   marker = "area",
                   marker_col = "red",
                   marker_size = 3,
-                  show_image = FALSE,
+                  plot =  FALSE,
                   save_image = TRUE,
                   dir_processed = tempdir(),
                   contour_size = 5)
@@ -947,7 +916,7 @@ af2 <-
                   marker = "area",
                   marker_col = "red",
                   marker_size = 3,
-                  show_image = FALSE,
+                  plot =  FALSE,
                   save_image = TRUE,
                   prefix = "proc2_",
                   dir_processed = tempdir(),
@@ -1042,158 +1011,35 @@ Orthomosaic kindly provided by Prof. Dr. [Ivan Ricardo Carvalho](https://www.res
 ```{r}
 #| out-width: "100%"
 
-
-shp <- image_import("mosaic.tif", plot = TRUE)
-
-# aligned <- image_align(shp)
+shp <- image_import("mosaic.jpg")
 aligned <- image_rotate(shp, angle = 82.591)
-# cropped <- image_crop(aligned, plot = TRUE)
 cropped <- image_crop(aligned,
-                      width = 1900:3953,
+                      width = 1900:2920,
                       height = 1350:1625,
                       plot = TRUE)
+
+# or using the mapview option
+# cropped <- image_prepare_mv(shp)
 anal <- 
   analyze_objects_shp(cropped,
-                      cols = 26,
+                      prepare = FALSE,
+                      ncol = 13,
                       index = "HUE",
                       object_index = "DGCI",
                       plot = FALSE,
                       watershed = FALSE)
-plot(cropped)
+plot(anal$final_image_masked)
 plot(anal$shapefiles)
-plot_measures(anal, measure = "DGCI")
+plot_measures(anal, measure = "coverage", vjust = -160, col = "black")
+plot_measures(anal, measure = "DGCI", vjust = -185, col = "red")
 ```
+
 
 
 # Fourier analyses
 ## Functions
 The functions were adapted from Claude (2088)^[Claude, J. 2008. Morphometrics with R. Springer.
 ]
-
-```{r}
-#| code-fold: true
-#| code-summary: Show functions
-
-# Core function for elliptical Fourier analyses
-# Elliptical Fourier transform (and its normalization)
-# adapted from https://momx.github.io/Momocs/reference/fourier.html
-fourier <- function(x, nhm = 10, ...) {
-  coo <- poly_check(x) |> poly_unclose()
-  nr <- nrow(coo)
-  if (nhm * 2 > nr) {
-    nhm <- floor(nr/2)
-    if (.is_verbose()) {
-      message("'nhm' must be lower than half the number of points, and has been set to ", nhm, "harmonics")
-    }
-  }
-  if (nhm == -1) {
-    nhm = floor(nr/2)
-    if (.is_verbose()) {
-      message("the number of harmonics used has been set to: ", nhm)
-    }
-  }
-  Dx <- coo[, 1] - coo[, 1][c(nr, (1:(nr - 1)))]
-  Dy <- coo[, 2] - coo[, 2][c(nr, (1:(nr - 1)))]
-  Dt <- sqrt(Dx^2 + Dy^2)
-  Dt[Dt < 1e-10] <- 1e-10  # to avoid Nan
-  t1 <- cumsum(Dt)
-  t1m1 <- c(0, t1[-nr])
-  T <- sum(Dt)
-  an <- bn <- cn <- dn <- numeric(nhm)
-  for (i in 1:nhm) {
-    Ti <- (T/(2 * pi^2 * i^2))
-    r <- 2 * i * pi
-    an[i] <- Ti * sum((Dx/Dt) * (cos(r * t1/T) - cos(r * t1m1/T)))
-    bn[i] <- Ti * sum((Dx/Dt) * (sin(r * t1/T) - sin(r * t1m1/T)))
-    cn[i] <- Ti * sum((Dy/Dt) * (cos(r * t1/T) - cos(r * t1m1/T)))
-    dn[i] <- Ti * sum((Dy/Dt) * (sin(r * t1/T) - sin(r * t1m1/T)))
-  }
-  ao <- 2 * sum(coo[, 1] * Dt/T)
-  co <- 2 * sum(coo[, 2] * Dt/T)
-  return(list(an = an, bn = bn, cn = cn, dn = dn, ao = ao,
-              co = co,
-              nr = nr,
-              coords = coo))
-}
-
-# Normalized coefficients
-fourier_norm <- function(ef, start = FALSE) {
-  A1 <- ef$an[1]
-  B1 <- ef$bn[1]
-  C1 <- ef$cn[1]
-  D1 <- ef$dn[1]
-  nhm <- length(ef$an)
-  theta <- 0.5 * atan(2 * (A1 * B1 + C1 * D1)/(A1^2 + C1^2 -
-                                                 B1^2 - D1^2))%%pi
-  phaseshift <- matrix(c(cos(theta), sin(theta), -sin(theta),
-                         cos(theta)), 2, 2)
-  M2 <- matrix(c(A1, C1, B1, D1), 2, 2) %*% phaseshift
-  v <- apply(M2^2, 2, sum)
-  if (v[1] < v[2]) {
-    theta <- theta + pi/2
-  }
-  theta <- (theta + pi/2)%%pi - pi/2
-  Aa <- A1 * cos(theta) + B1 * sin(theta)
-  Cc <- C1 * cos(theta) + D1 * sin(theta)
-  scale <- sqrt(Aa^2 + Cc^2)
-  psi <- atan(Cc/Aa)%%pi
-  if (Aa < 0) {
-    psi <- psi + pi
-  }
-  size <- 1/scale
-  rotation <- matrix(c(cos(psi), -sin(psi), sin(psi), cos(psi)),
-                     2, 2)
-  A <- B <- C <- D <- numeric(nhm)
-  if (start) {
-    theta <- 0
-  }
-  for (i in 1:nhm) {
-    mat <- size * rotation %*%
-      matrix(c(ef$an[i], ef$cn[i],
-               ef$bn[i], ef$dn[i]), 2, 2) %*%
-      matrix(c(cos(i * theta), sin(i * theta),
-               -sin(i * theta), cos(i * theta)), 2, 2)
-    A[i] <- mat[1, 1]
-    B[i] <- mat[1, 2]
-    C[i] <- mat[2, 1]
-    D[i] <- mat[2, 2]
-    lnef <- c(A[i], B[i], C[i], D[i])
-  }
-  list(A = A, B = B, C = C, D = D, size = scale, theta = theta,
-       psi = psi, ao = ef$ao, co = ef$co, lnef = lnef)
-}
-
-# inverse fourier
-fourier_inv <- function(ef, nhm, nb.pts = 120) {
-  if (is.null(ef$ao))
-    ef$ao <- 0
-  if (is.null(ef$co))
-    ef$co <- 0
-  an <- ef$an
-  bn <- ef$bn
-  cn <- ef$cn
-  dn <- ef$dn
-  ao <- ef$ao
-  co <- ef$co
-  if (missing(nhm)) {
-    nhm <- length(an)
-  }
-  theta <- seq(0, 2 * pi, length = nb.pts + 1)[-(nb.pts + 1)]
-  hx <- matrix(NA, nhm, nb.pts)
-  hy <- matrix(NA, nhm, nb.pts)
-  for (i in 1:nhm) {
-    hx[i, ] <- an[i] * cos(i * theta) + bn[i] * sin(i * theta)
-    hy[i, ] <- cn[i] * cos(i * theta) + dn[i] * sin(i * theta)
-  }
-  x <- (ao/2) + apply(hx, 2, sum)
-  y <- (co/2) + apply(hy, 2, sum)
-  coo <- cbind(x, y)
-  colnames(coo) <- c("x", "y")
-  return(coo)
-}
-
-```
-
 
 ## Elliptical fourier
 
@@ -1209,21 +1055,18 @@ conts <-
   object_contour(imgs,
                  index = "B",
                  watershed = FALSE,
-                 show_image = FALSE)
+                 plot =  FALSE)
 
 
-d <- fourier(conts$ind1$`2`, nhm = 100)
-plot(imgs$ind1)
-# 10 harmônicas
-d_i <- fourier_inv(d, 10, nb.pts = 1000)
-plot_contour(d_i, lwd = 2)
-# 20 harmônicas
-d_i <- fourier_inv(d, 20, nb.pts = 1000)
-plot_contour(d_i, lwd = 2, col = "blue")
-# 40 harmônicas
-d_i <- fourier_inv(d, 80, nb.pts = 1000)
-plot_contour(d_i, lwd = 2, col = "red")
+ef <- efourier(conts, nharm = 30)
+efi1 <- efourier_inv(ef[[8]], nharm = 5)
+efi2 <- efourier_inv(ef[[8]], nharm = 10)
+efi3 <- efourier_inv(ef[[8]], nharm = 30)
 
+plot(imgs[[8]])
+plot_contour(efi1)
+plot_contour(efi2, col = "red")
+plot_contour(efi3, col = "blue")
 ```
 
 
@@ -1232,29 +1075,20 @@ plot_contour(d_i, lwd = 2, col = "red")
 ```{r}
 #| out-width: "100%"
 
-
 library(pliman)
 img <- image_import("changes.png", path = "fourier")
 cont <- 
   object_contour(img,
                  index = "B",
                  watershed = FALSE,
-                 show_image = FALSE)
+                 plot =  FALSE)
 
 
-f1 <- fourier(cont$`1`, nhm = 5)
-f2 <- fourier(cont$`2`, nhm = 5)
-f3 <- fourier(cont$`3`, nhm = 5)
-f1$an
-f2$an
-f3$an
-
-f1n <- fourier_norm(f1)
-f2n <- fourier_norm(f2)
-f3n <- fourier_norm(f3)
-f1n$A
-f2n$A
-f3n$A
+ef <- 
+  efourier(cont) |> 
+  efourier_norm() |> 
+  efourier_coefs()
+ef
 ```
 
 
@@ -1269,26 +1103,22 @@ conts <-
   object_contour(imgs,
                  index = "B",
                  watershed = FALSE,
-                 show_image = FALSE)
+                 plot =  FALSE) |> 
+  efourier() |> 
+  efourier_norm() |> 
+  efourier_coefs()
 
-eff <- lapply(conts, function(x){
-  fourier(x[[1]], nhm = 15) |> fourier_norm()
-})
-
-an <- do.call(rbind, lapply(eff, function(x){x[["A"]]}))
-bn <- do.call(rbind, lapply(eff, function(x){x[["B"]]}))
-cn <- do.call(rbind, lapply(eff, function(x){x[["C"]]}))
-dn <- do.call(rbind, lapply(eff, function(x){x[["D"]]}))
 
 coefs <- 
-  cbind(an, bn, cn, dn) |> 
-  transform(specie = c(rep(paste0("specie", 1:3), each = 3)))
+  conts |> 
+  dplyr::select(-object) |> 
+  dplyr::mutate(specie = c(rep(paste0("specie", 1:3), each = 3)), .before = 1)
 
 
 library(factoextra)
 library(FactoMineR)
-pca <- PCA(coefs, quali.sup = 61, graph = FALSE)
-fviz_pca_ind(pca, habillage = 61, repel = TRUE)
+pca <- PCA(coefs, quali.sup = 1, graph = FALSE)
+fviz_pca_ind(pca, habillage = 1, repel = TRUE)
 
 image_combine(imgs)
 
@@ -1296,46 +1126,26 @@ image_combine(imgs)
 
 
 # Distance to an ideotype
-## Cluster objects
+
 ```{r}
+
 #| out-width: "100%"
 img <- image_import("distance.png", path = "fourier")
 cont <- 
   object_contour(img,
                  index = "B",
                  watershed = FALSE,
-                 show_image = FALSE)
-plot_polygon(cont, aspect_ratio = 1)
+                 plot =  TRUE)
+efs <- 
+  cont |> 
+  efourier() |> 
+  efourier_norm() |> 
+  efourier_coefs() |> 
+  dplyr::select(-object)
 
 
-dfour <- lapply(cont, function(x){
-  fourier(x, nhm = 15) |> fourier_norm()
-})
-
-an <- do.call(rbind, lapply(dfour, function(x){x[["A"]]}))
-bn <- do.call(rbind, lapply(dfour, function(x){x[["B"]]}))
-cn <- do.call(rbind, lapply(dfour, function(x){x[["C"]]}))
-dn <- do.call(rbind, lapply(dfour, function(x){x[["D"]]}))
-
-coefs <- cbind(an, bn, cn, dn)
-
-
-library(factoextra)
-library(FactoMineR)
-library(NbClust)
-pca <- PCA(coefs, graph = FALSE)
-fviz_pca_ind(pca, repel = TRUE)
-
-# distance
-distance <- dist(coefs) |> hclust()
-fviz_dend(distance, k = 3)
-
-```
-
-## Distance to an ideotype
-```{r}
-desc_ide <- coefs[1,]
-desc_objs <- coefs[-1,]
+desc_ide <- as.matrix(efs[1, ])
+desc_objs <- as.matrix(efs[-1, ])
 
 # compute the differences between each object and the ideotype
 gen_ide <- sweep(desc_objs, 2, desc_ide, "-")
@@ -1344,5 +1154,7 @@ distances <-
   apply(gen_ide, 1, function(x){sqrt(sum(x^2))}) %>% 
   sort(decreasing = FALSE)
 distances
+
+plot_polygon(cont)
 ```
 

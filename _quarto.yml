@@ -13,11 +13,6 @@ website:
   search:
     location: sidebar
   title: "R package {pliman}"
-  crossref:
-    fig-title: Fig     # (default is "Figure")
-    tbl-title: Tbl     # (default is "Table")
-    title-delim: —     # (default is ":")
-  page-layout: custom
   page-footer: 
     border: true
     background: light
